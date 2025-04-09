@@ -1,0 +1,317 @@
+/* Basic Reset & Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Base Font Size for Scalability */
+html {
+    font-size: 18px; /* Adjust base size here */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+html, body {
+    height: 100%;
+    background-color: #f0f4f8;
+    overscroll-behavior-y: contain;
+    line-height: 1.5;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 15px;
+}
+
+.app-container {
+    background-color: #ffffff;
+    padding: 25px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/* Keyboard Styling */
+.keyboard {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    margin: 0 auto;
+    background-color: #aaa;
+    border: 1px solid #555;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.key {
+    position: absolute;
+    border: 1px solid #555;
+    cursor: pointer;
+    display: flex;
+    font-weight: bold;
+    font-size: 1.1rem;
+    user-select: none;
+    transition: background-color 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
+    line-height: 1.2;
+}
+
+.key span {
+    pointer-events: none;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.key.white {
+    width: calc(100% / 7);
+    height: 100%;
+    background-color: #ffffff;
+    color: #333;
+    z-index: 1;
+    bottom: 0;
+    border-radius: 0 0 5px 5px;
+    border-top: none;
+    /* White Key Text Alignment: Bottom Center, Close to Edge */
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-bottom: 1.5rem; /* Reduced padding for bottom alignment */
+}
+/* Position white keys */
+.key.white[data-note="C"] { left: 0; }
+.key.white[data-note="D"] { left: calc(100% / 7 * 1); }
+.key.white[data-note="E"] { left: calc(100% / 7 * 2); }
+.key.white[data-note="F"] { left: calc(100% / 7 * 3); }
+.key.white[data-note="G"] { left: calc(100% / 7 * 4); }
+.key.white[data-note="A"] { left: calc(100% / 7 * 5); }
+.key.white[data-note="B"] { left: calc(100% / 7 * 6); }
+
+
+.key.black {
+    width: calc(100% / 7 * 0.6);
+    height: 60%;
+    background-color: #333;
+    color: #fff;
+    z-index: 2;
+    top: 0;
+    border-radius: 0 0 3px 3px;
+    border-bottom: none;
+    font-size: 0.9rem;
+    /* Black Key Text Alignment: Vertical & Horizontal Center */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    text-align: center;
+}
+/* Position black keys */
+.key.black[data-note-sharp="C♯"] { left: calc(1 * (100% / 7) - (100% / 7 * 0.6 / 2)); }
+.key.black[data-note-sharp="D♯"] { left: calc(2 * (100% / 7) - (100% / 7 * 0.6 / 2)); }
+.key.black[data-note-sharp="F♯"] { left: calc(4 * (100% / 7) - (100% / 7 * 0.6 / 2)); }
+.key.black[data-note-sharp="G♯"] { left: calc(5 * (100% / 7) - (100% / 7 * 0.6 / 2)); }
+.key.black[data-note-sharp="A♯"] { left: calc(6 * (100% / 7) - (100% / 7 * 0.6 / 2)); }
+
+
+/* Selection Styling */
+.key.white[data-selected="true"] {
+   box-shadow: inset 0 0 0 3px #007bff;
+}
+.key.white[data-selected="false"] {
+    background-color: #ddd;
+    opacity: 0.7;
+}
+.key.black { /* Base style for black key */
+     box-shadow: none;
+     transition: background-color 0.1s ease, opacity 0.2s ease;
+}
+/* Unselected Black Key Style */
+.key.black[data-selected-sharp="false"][data-selected-flat="false"] {
+    background-color: #666; /* Dim background */
+    opacity: 0.6; /* Overall dim */
+}
+/* Text inside fully unselected black key */
+.key.black[data-selected-sharp="false"][data-selected-flat="false"] span {
+    opacity: 0.4; /* Make text very dim */
+}
+
+/* Black key inner spans - Base styling when potentially active */
+.key.black span.note-sharp,
+.key.black span.note-flat {
+    display: block;
+    padding: 0.1rem 0.2rem;
+    opacity: 0.1; /* Base opacity for non-selected note in an active key */
+    transition: opacity 0.2s ease, font-weight 0.2s ease;
+    width: 100%;
+    text-align: center;
+}
+/* Highlight selected sharp/flat text */
+.key.black[data-selected-sharp="true"] span.note-sharp {
+    opacity: 1.0;
+    font-weight: bold;
+}
+.key.black[data-selected-flat="true"] span.note-flat {
+    opacity: 1.0;
+    font-weight: bold;
+}
+
+/* Hover effect */
+.key:hover {
+    opacity: 0.85;
+}
+
+/* Controls Styling */
+.controls {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-basis: 60%;
+    min-width: 220px;
+}
+.slider-container label {
+    font-size: 1.05rem;
+    white-space: nowrap;
+}
+#intervalSlider {
+    cursor: pointer;
+    flex-grow: 1;
+    height: 8px;
+}
+#intervalValue {
+    font-weight: bold;
+    min-width: 35px;
+    text-align: right;
+    font-size: 1.05rem;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 15px;
+    flex-basis: 35%;
+    justify-content: center;
+}
+
+/* Button Styling */
+button {
+    padding: 10px 18px;
+    font-size: 1.05rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    background-color: #007bff;
+    color: white;
+    font-weight: 500;
+}
+button:hover {
+    background-color: #0056b3;
+}
+button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Note Display Styling */
+#noteDisplay {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #007bff; /* Note text color */
+    margin-top: 10px;
+    min-height: 1.2em;
+    width: 100%;
+    word-wrap: break-word;
+    line-height: 1;
+    position: relative;
+    background-color: transparent; /* Default background */
+    padding: 5px 10px; /* Padding for flash visibility */
+    border-radius: 5px; /* Optional rounded corners */
+}
+
+/* Keyframes for the Flash Animation */
+@keyframes flashBackground {
+  0% {
+    background-color: transparent;
+  }
+  30% {
+    background-color: #ffffea; /* Subtle light yellow flash */
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Class to Trigger the Animation */
+#noteDisplay.note-flash {
+  animation-name: flashBackground;
+  animation-duration: 0.3s; /* Flash duration */
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1; /* Play once */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    html { font-size: 17px; }
+    .app-container { gap: 20px; }
+    h1 { font-size: 1.8rem; }
+    .keyboard { height: 140px; }
+    .key { font-size: 1rem; }
+    .key.black { font-size: 0.85rem; }
+    #noteDisplay { font-size: 4rem; }
+    button { padding: 8px 15px; font-size: 1rem;}
+}
+
+@media (max-width: 480px) {
+    html { font-size: 16px; }
+    body { padding: 10px; align-items: flex-start; min-height: 100vh; }
+    .app-container { padding: 15px; gap: 15px; min-height: calc(100vh - 20px); justify-content: space-between; }
+    h1 { font-size: 1.6rem; margin-bottom: 5px; }
+    .keyboard { height: 120px; }
+    .key { font-size: 0.9rem; }
+    .key.white { padding-bottom: 0.2rem; }
+    .key.black { font-size: 0.8rem; }
+
+    .controls { flex-direction: column; gap: 15px; }
+    .slider-container { flex-basis: auto; width: 90%; justify-content: center; gap: 8px; }
+    .buttons-container { flex-basis: auto; width: 90%; justify-content: space-around; gap: 10px;}
+    #intervalSlider { max-width: 180px; height: 6px; }
+    .slider-container label, #intervalValue { font-size: 1rem;}
+
+    #noteDisplay { font-size: 3.5rem; margin-top: 5px; }
+    button { padding: 8px 12px; font-size: 1rem;}
+}
+
+@media (max-width: 360px) {
+    html { font-size: 15px; }
+    h1 { font-size: 1.4rem; }
+    #noteDisplay { font-size: 3rem; }
+    .keyboard { height: 110px; }
+    .key { font-size: 0.85rem; }
+    .key.white { padding-bottom: 0.15rem; }
+    .key.black { font-size: 0.75rem; }
+    .key.black span.note-sharp, .key.black span.note-flat { padding: 0.05rem 0.1rem; }
+    button { padding: 6px 10px; font-size: 0.9rem;}
+}
